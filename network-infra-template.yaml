@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: network-infra
+parameters:
+  - name: BASE_DOCKER_IMAGE
+    value: fedora
+  - name: BASE_DOCKER_IMAGE_VERSION
+    value: "27"
+  - name: INTERMEDIATE_IMAGE
+    value: network-base-image
+  - name: INTERMEDIATE_IMAGE_VERSION
+    value: latest
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      build: ${INTERMEDIATE_IMAGE}
+    name: ${BASE_DOCKER_IMAGE}
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: ${BASE_DOCKER_IMAGE}:${BASE_DOCKER_IMAGE_VERSION}
+      from:
+        kind: DockerImage
+        name: ${BASE_DOCKER_IMAGE}:${BASE_DOCKER_IMAGE_VERSION}
+#      importPolicy: {}
+      name: ${BASE_DOCKER_IMAGE_VERSION}
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      build: ${INTERMEDIATE_IMAGE}
+    name: ${INTERMEDIATE_IMAGE}
+  spec:
+#    lookupPolicy:
+#      local: false
+    tags:
+    - from:
+        kind: DockerImage
+        name: ${INTERMEDIATE_IMAGE}:${INTERMEDIATE_IMAGE_VERSION}
+#      importPolicy: {}
+      name: ${INTERMEDIATE_IMAGE_VERSION}
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      build: ${INTERMEDIATE_IMAGE}
+    name: ${INTERMEDIATE_IMAGE}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${INTERMEDIATE_IMAGE}:${INTERMEDIATE_IMAGE_VERSION}
+    source:
+      dockerfile: |
+        FROM ${BASE_DOCKER_IMAGE}:${BASE_DOCKER_IMAGE_VERSION}
+        MAINTAINER dmitry sevostyanov <dmitry.sevostyanov@gmail.com>
+        RUN \
+            $YUM \
+                install -y \
+                $BASE_PKG \
+                $PKG1 \
+                $PKG2 \
+                && \
+            $YUM \
+                clean \
+                    all \
+      type: Dockerfile
+    strategy:
+      dockerStrategy:
+        env:
+        - name: YUM
+          value: dnf
+        - name: BASE_PKG
+          value: iproute iputils net-tools procps-ng tar
+        - name: PKG1
+          value: bind bind-utils
+        - name: PKG21
+          value: dhcp glusterfs-server nfs-utils openldap-clients openldap-servers
+            samba
+#        from:
+#          kind: ImageStreamTag
+#          name: ${BASE_DOCKER_IMAGE}:${BASE_DOCKER_IMAGE_VERSION}
+      type: Docker
+    triggers:
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
