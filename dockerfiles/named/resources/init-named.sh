@@ -35,10 +35,10 @@ cat ${named_etc_ro}/named.conf.${tmpl_suffix} | sed "s|__ALLOW_RECURSION__|$recu
 mkdir -p ${NAMED_DATA}/{data,dynamic,forward,reverse}
 
 master_in_addr_arpa=`echo $LOCAL_ZONE_FORWARD_NET | sed 's/\([0-9]\+\)\.\([0-9]\+\)\.\([0-9]\+\)/\3.\2.\1/'`
-cat ${named_etc_ro}/local-zone.conf.${tmpl_suffix} | sed "\
+cat ${named_etc_ro}/local-zones.conf.${tmpl_suffix} | sed "\
     s|__MASTER_LOCAL_ZONE_NAME__|$MASTER_LOCAL_ZONE_NAME| ; \
     s|__MASTER_IN_ADDR_ARPA__|$master_in_addr_arpa| ; \
-    " > ${NAMED_ETC}/local-zone.conf
+    " > ${NAMED_ETC}/local-zones.conf
 
 cat ${named_etc_ro}/local.db.${tmpl_suffix} | sed "s|__LOCAL_ZONE_FORWARD_NET__|$LOCAL_ZONE_FORWARD_NET|" > ${NAMED_DATA}/forward/${MASTER_LOCAL_ZONE_NAME}.db
 
