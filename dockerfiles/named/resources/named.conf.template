@@ -17,8 +17,8 @@ options {
         statistics-file "data/named_stats.txt";
         memstatistics-file "data/named_mem_stats.txt";
 	allow-query     { localhost; localnet; };
-//	allow-recursion { localhost; localnet; };
-	recursion no;
+	allow-recursion { localhost; localnet; };
+	recursion yes;
 
 	dnssec-enable yes;
 	dnssec-validation no;

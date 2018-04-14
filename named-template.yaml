@@ -15,6 +15,9 @@ parameters:
   value: ds.test
 - name: LOCAL_ZONE_FORWARD_NET
   value: "172.17.7"
+- name: MASTER_SERVERS
+  description: IP address of Master Named Service (Service name of master service, ip address)
+  value: ""
 #- name: BASE_IMAGE_NAMESPACE
 #  value: network-infra
 objects:
@@ -86,6 +89,8 @@ objects:
         - env:
           - name: MASTER_LOCAL_ZONE_NAME
             value: ${MASTER_LOCAL_ZONE_NAME}
+          - name: MASTER_SERVERS
+            value: ${MASTER_SERVERS}
           image: " "
           name: ${APP_NAME}
           livenessProbe:

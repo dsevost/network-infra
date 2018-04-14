@@ -38,6 +38,7 @@ master_in_addr_arpa=`echo $LOCAL_ZONE_FORWARD_NET | sed 's/\([0-9]\+\)\.\([0-9]\
 cat ${named_etc_ro}/local-zones.conf.${tmpl_suffix} | sed "\
     s|__MASTER_LOCAL_ZONE_NAME__|$MASTER_LOCAL_ZONE_NAME| ; \
     s|__MASTER_IN_ADDR_ARPA__|$master_in_addr_arpa| ; \
+    s|__MASTER_SERVERS__|$MASTER_SERVERS| ; \
     " > ${NAMED_ETC}/local-zones.conf
 
 cat ${named_etc_ro}/local.db.${tmpl_suffix} | sed "s|__LOCAL_ZONE_FORWARD_NET__|$LOCAL_ZONE_FORWARD_NET|" > ${NAMED_DATA}/forward/${MASTER_LOCAL_ZONE_NAME}.db
