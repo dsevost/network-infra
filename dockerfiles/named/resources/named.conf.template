@@ -10,8 +10,8 @@
 include "/etc/named/acl.conf";
 
 options {
-	listen-on port 53 { any; };
-	listen-on-v6 port 53 { any; };
+	listen-on port 8053 { any; };
+	listen-on-v6 port 8053 { any; };
 	directory 	"/var/named";
 	dump-file 	"data/cache_dump.db";
         statistics-file "data/named_stats.txt";
@@ -53,7 +53,7 @@ zone "." IN {
 	file "/etc/named_ro/named.ca";
 };
 
-include "/etc/named/named.rfc1912.zones";
+include "/etc/named_ro/named.rfc1912.zones";
 include "/etc/named.root.key";
 
 # Use with the following in named.conf, adjusting the allow list as needed:

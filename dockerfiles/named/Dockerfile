@@ -22,6 +22,7 @@ RUN \
     /usr/sbin/rndc-confgen -a -u named -r /dev/urandom -c ${NAMED_ETC}_ro/rndc.key ; \
     chown -R $BIND_USER ${NAMED_ETC}{,_ro} ; \
     chmod 644 ${NAMED_ETC}_ro/* ; \
+    chmod 777 /var/run/named ; \
     chmod 755 /usr/local/sbin/init-named.sh
 
 COPY resources/*.template ${NAMED_ETC}_ro/
