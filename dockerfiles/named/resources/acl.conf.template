@@ -1,3 +1,7 @@
 acl localnet {
     __ACL_LOCAL_NETS__
 } ;
+
+acl acl-transfer {
+    0.0.0.0/0 ;
+} ;
