@@ -24,7 +24,7 @@ zone "__MASTER_DYNAMIC_LOCAL_ZONE__." IN {
 */
 
 /*
-zone "__SLAVE_LOCAL_ZONE_NAME__." IN {
+zone "__MASTER_LOCAL_ZONE_NAME__." IN {
     type slave;
     masters {
 	__MASTER_SERVERS__

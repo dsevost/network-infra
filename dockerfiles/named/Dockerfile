@@ -12,7 +12,7 @@ ENV \
 
 EXPOSE 8053/tcp 8053/udp
 
-COPY resources/init-named.sh /usr/local/sbin/
+COPY resources/*.sh /usr/local/bin/
 
 RUN \
     [ -d "$NAMED_ETC" ] && rm -rf ${NAMED_ETC}{,_ro} ; \
@@ -23,7 +23,7 @@ RUN \
     chown -R $BIND_USER ${NAMED_ETC}{,_ro} ; \
     chmod 644 ${NAMED_ETC}_ro/* ; \
     chmod 777 /var/run/named ; \
-    chmod 755 /usr/local/sbin/init-named.sh
+    chmod 755 /usr/local/bin/*.sh
 
 COPY resources/*.template ${NAMED_ETC}_ro/
 
