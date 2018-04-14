@@ -12,17 +12,18 @@ ENV \
 
 EXPOSE 53/tcp 53/udp
 
+COPY resources/*.template ${NAMED_ETC}_ro/
+COPY resources/init-named.sh /usr/local/sbin/
+
 RUN \
     [ -d "$NAMED_ETC" ] && rm -rf ${NAMED_ETC}{,_ro} ; \
     mkdir -p ${NAMED_ETC}{,_ro} ; \
     cp /var/named/named.ca ${NAMED_ETC}_ro ; \
     /usr/sbin/rndc-confgen -a -u named -r /dev/urandom -c ${NAMED_ETC}_ro/rndc.key ; \
-    chown -R $BIND_USER ${NAMED_ETC}{,_ro} 
+    chown -R $BIND_USER ${NAMED_ETC}{,_ro} ; \
+    chmod 755 /usr/local/sbin/init-named.sh
 #    ; \
 #    chmod 644 -R ${NAMED_ETC}{,_ro}
-
-COPY resources/*.template ${NAMED_ETC}_ro/
-COPY resources/init-named.sh /usr/local/sbin/
 
 #VOLUME ["$NAMED_ETC", "$NAMED_DATA"]
 
