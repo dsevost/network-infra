@@ -20,6 +20,7 @@ RUN \
     cp /var/named/named.ca ${NAMED_ETC}_ro ; \
     /usr/sbin/rndc-confgen -a -u named -r /dev/urandom -c ${NAMED_ETC}_ro/rndc.key ; \
     chown -R $BIND_USER ${NAMED_ETC}{,_ro} ; \
+    chmod 644 /etc/named.rfc1912.zones ; \
     chmod 755 /usr/local/sbin/init-named.sh
 
 COPY resources/*.template ${NAMED_ETC}_ro/
