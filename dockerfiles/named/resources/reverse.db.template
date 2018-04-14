@@ -1,0 +1,15 @@
+$TTL 172800	; 2 days
+@		IN	SOA	@ dnsmaster.local. (
+				2016082600 ; serial
+				28800      ; refresh (8 hours)
+				14400      ; retry (4 hours)
+				3600000    ; expire (5 weeks 6 days 16 hours)
+				86400      ; minimum (1 day)
+				)
+		IN	NS	ns1.__MASTER_LOCAL_ZONE_NAME__.
+		IN	NS	ns2.__MASTER_LOCAL_ZONE_NAME__.
+;
+251		IN	PTR	ns1.__MASTER_LOCAL_ZONE_NAME__.
+252		IN	PTR	ns2.__MASTER_LOCAL_ZONE_NAME__.
+;253		IN	PTR	ns-cache.__MASTER_LOCAL_ZONE_NAME__.
+;254		IN	PTR	ns-cache.__MASTER_LOCAL_ZONE_NAME__.

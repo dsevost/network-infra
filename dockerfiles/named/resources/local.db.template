@@ -1,0 +1,32 @@
+$TTL 172800     ; 2 days
+@		IN	SOA	@ dnsmaster.local. (
+					2016052400 ; serial
+					10800      ; refresh (3 hours)
+					900        ; retry (15 minutes)
+					604800     ; expire (1 week)
+					3600       ; minimum (1 hour)
+				)
+		IN	NS	ns1
+		IN	NS	ns2
+;		IN	A	__LOCAL_ZONE_FORWARD_NET__.1
+;
+ns1		IN	A	__LOCAL_ZONE_FORWARD_NET__.251
+ns2		IN	A	__LOCAL_ZONE_FORWARD_NET__.252
+;ns-cache	IN	A	__LOCAL_ZONE_FORWARD_NET__.253
+;		IN	A	__LOCAL_ZONE_FORWARD_NET__.254
+;ns		IN	CNAME	ns-cache
+;
+;ldap1		IN	CNAME	ns1
+;ldap2		IN	CNAME	ns2
+;ldap		IN	CNAME	ldap1
+;
+;
+;
+;dyn		IN	NS	ns1
+;		IN	NS	ns2
+;int		IN	NS	ns1
+;		IN	NS	ns2
+;mngt		IN	NS	ns1
+;		IN	NS	ns2
+;srv		IN	NS	ns1
+;		IN	NS	ns2

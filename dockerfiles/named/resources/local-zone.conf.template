@@ -1,0 +1,46 @@
+zone "__MASTER_LOCAL_ZONE_NAME__." IN {
+    type master;
+    file "forward/__MASTER_LOCAL_ZONE_NAME__.db";
+    allow-query { localhost; localnet; };
+    allow-transfer { acl-transfer; };
+};
+
+/*
+zone "__MASTER_IN_ADDR_ARPA__.in-addr.arpa." IN {
+    type master;
+    file "reverse/__MASTER_IN_ADDR_ARPA__.db";
+    allow-query { localhost; localnet; };
+    allow-transfer { acl-transfer; };
+};
+*/
+
+/*
+zone "__MASTER_DYNAMIC_LOCAL_ZONE__." IN {
+    type master;
+    file "dynamic/__MASTER_DYNAMIC_LOCAL_ZONE__.db";
+    allow-update { ddns-updaters; };
+    allow-transfer { acl-transfer; };
+};
+*/
+
+/*
+zone "__SLAVE_LOCAL_ZONE_NAME__." IN {
+    type slave;
+    masters {
+	__MASTER_SERVERS__
+    }
+    file "dynamic/__MASTER_LOCAL_ZONE_NAME__.db";
+    allow-query { localhost; localnet; };
+    allow-transfer { acl-transfer; };
+};
+*/
+
+/*
+zone "__FORWARD_ZONE_NAME__." IN {
+    type forward;
+    forward first;
+    forwarders {
+	__FORWARD_ZONE_SERVERS__
+    };
+};
+*/

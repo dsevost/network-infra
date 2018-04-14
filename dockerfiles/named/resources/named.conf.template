@@ -18,7 +18,7 @@ options {
         memstatistics-file "data/named_mem_stats.txt";
 	allow-query     { localhost; localnet; };
 //	allow-recursion { localhost; localnet; };
-	recursion yes;
+	recursion no;
 
 	dnssec-enable yes;
 	dnssec-validation no;
@@ -64,3 +64,4 @@ controls {
 	allow { 127.0.0.1; } keys { "rndc-key"; };
 };
 # End of named.conf
+include "/etc/named/local-zones.conf";
