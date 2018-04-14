@@ -17,8 +17,8 @@ options {
         statistics-file "data/named_stats.txt";
         memstatistics-file "data/named_mem_stats.txt";
 	allow-query     { localhost; localnet; };
-	allow-recursion { localhost; localnet; };
-	recursion __ALLOW_RECURSION__;
+//	allow-recursion { localhost; localnet; };
+	recursion yes;
 
 	dnssec-enable yes;
 	dnssec-validation no;
@@ -60,7 +60,7 @@ include "/etc/named.root.key";
 include "/etc/named_ro/rndc.key";
 
 controls {
-	inet 127.0.0.1 port 953
+	inet 127.0.0.1 port 1953
 	allow { 127.0.0.1; } keys { "rndc-key"; };
 };
 # End of named.conf

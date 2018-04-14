@@ -31,3 +31,5 @@ case ${ALLOW_RECURSION} in
 esac
 
 cat ${named_etc_ro}/named.conf.${tmpl_suffix} | sed "s|__ALLOW_RECURSION__|$recursion|" > ${NAMED_ETC}/named.conf
+
+mkdir -p ${NAMED_DATA}/{data,dynamic,forward,reverse}
