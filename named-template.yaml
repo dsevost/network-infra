@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: network-infra-named
+parameters:
+- name: APP_NAME
+  value: named-master
+- name: BASE_IMAGESTREAM_NAME
+  value: network-base-image
+- name: BASE_IMAGE_STREAM_TAG
+  value: latest
+- name: BASE_IMAGE_NAMESPACE
+  value: network-infra
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - from:
+        kind: ImageStreamTag
+        name: ${APP_NAME}
+      name: latest
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_NAME}:latest
+    source:
+      contextDir: dockerfiles/named
+      git:
+        uri: https://github.com/dsevost/network-infra
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: ${BASE_IMAGESTREAM_NAME}:${BASE_IMAGE_STREAM_TAG}
+      type: Docker
+    triggers:
+    - type: ConfigChange
+    - github:
+        secret: 0SyIow9GF6GCRzAIOp0o
+      type: GitHub
+    - generic:
+        secret: zmsi-CKr5cOsODkWi-ZD
+      type: Generic
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    replicas: 1
+    selector:
+      app: ${APP_NAME}
+      deploymentconfig: ${APP_NAME}
+    strategy:
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: ${APP_NAME}
+          deploymentconfig: ${APP_NAME}
+      spec:
+        containers:
+        - image: " "
+          name: ${APP_NAME}
+          ports:
+          - containerPort: 8053
+            protocol: TCP
+          - containerPort: 8053
+            protocol: UDP
+          volumeMounts:
+          - mountPath: /etc/named
+            name: named-etc
+          - mountPath: /var/named
+            name: named-data
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - /usr/local/sbin/init-named.sh
+          image: " "
+          name: init-named
+          volumeMounts:
+          - mountPath: /etc/named
+            name: named-etc
+          - mountPath: /var/named
+            name: named-data
+        volumes:
+        - emptyDir: {}
+          name: named-etc
+        - emptyDir: {}
+          name: named-data
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APP_NAME}
+        - init-named
+        from:
+          kind: ImageStreamTag
+          name: ${APP_NAME}:latest
+#          namespace: ${BASE_IMAGE_STREAM_NAMESPACE}
+      type: ImageChange

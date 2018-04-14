@@ -10,7 +10,7 @@ ENV \
     NAMED_ETC=/etc/named \
     NAMED_DATA=/var/named
 
-EXPOSE 53/tcp 53/udp
+EXPOSE 8053/tcp 8053/udp
 
 COPY resources/init-named.sh /usr/local/sbin/
 
