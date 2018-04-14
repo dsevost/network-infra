@@ -1,4 +1,6 @@
 acl localnet {
+    // OpenShift default SDN addresses
+    10.128.0.0/14 ;
     __ACL_LOCAL_NETS__
 } ;
 

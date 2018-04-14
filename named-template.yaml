@@ -83,7 +83,10 @@ objects:
           deploymentconfig: ${APP_NAME}
       spec:
         containers:
-        - image: " "
+        - env:
+          - name: MASTER_LOCAL_ZONE_NAME
+            value: ${MASTER_LOCAL_ZONE_NAME}
+          image: " "
           name: ${APP_NAME}
           livenessProbe:
             initialDelaySeconds: 10
@@ -93,7 +96,7 @@ objects:
           readinessProbe:
             exec:
               command:
-                - /usr/local/bin/readyness.sh
+              - /usr/local/bin/readyness.sh
             initialDelaySeconds: 10
             timeoutSeconds: 10
           ports:
@@ -116,7 +119,7 @@ objects:
           - name: LOCAL_ZONE_FORWARD_NET
             value: ${LOCAL_ZONE_FORWARD_NET}
           command:
-          - /usr/local/sbin/init-named.sh
+          - /usr/local/bin/init-named.sh
           image: " "
           name: init-named
           volumeMounts:
@@ -140,3 +143,19 @@ objects:
           kind: ImageStreamTag
           name: ${APP_NAME}:latest
       type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}-ingress
+  spec:
+    externalTrafficPolicy: Cluster
+    ports:
+    - port: 53
+      protocol: UDP
+      targetPort: 8053
+    selector:
+      deploymentconfig: ${APP_NAME}
+    sessionAffinity: None
+    type: LoadBalancer
