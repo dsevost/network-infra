@@ -15,7 +15,7 @@ function str2list() {
 }
 
 named_etc_ro=${NAMED_ETC}_ro
-named_etc_ro=${NAMED_ETC}
+#named_etc_ro=${NAMED_ETC}
 
 cat ${named_etc_ro}/acl.conf.${tmpl_suffix} | sed "s|__ACL_LOCAL_NETS__|$(str2list ACL_LOCAL_NETS)|" > ${NAMED_ETC}/acl.conf
 

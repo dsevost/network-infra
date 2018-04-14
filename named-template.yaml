@@ -9,8 +9,14 @@ parameters:
   value: network-base-image
 - name: BASE_IMAGE_STREAM_TAG
   value: latest
-- name: BASE_IMAGE_NAMESPACE
-  value: network-infra
+- name: ACL_LOCAL_NETS
+  value: "172.16.10.0/24 172.17.0.0/16 172.18.0.0/16"
+- name: MASTER_LOCAL_ZONE_NAME
+  value: ds.test
+- name: LOCAL_ZONE_FORWARD_NET
+  value: "172.17.7"
+#- name: BASE_IMAGE_NAMESPACE
+#  value: network-infra
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -47,6 +53,7 @@ objects:
         from:
           kind: ImageStreamTag
           name: ${BASE_IMAGESTREAM_NAME}:${BASE_IMAGE_STREAM_TAG}
+#          namespace: ${BASE_IMAGE_STREAM_NAMESPACE}
       type: Docker
     triggers:
     - type: ConfigChange
@@ -90,7 +97,15 @@ objects:
             name: named-data
         dnsPolicy: ClusterFirst
         initContainers:
-        - command:
+        - 
+          env:
+          - name: ACL_LOCAL_NETS
+            value: ${ACL_LOCAL_NETS}
+          - name: MASTER_LOCAL_ZONE_NAME
+            value: ${MASTER_LOCAL_ZONE_NAME}
+          - name: LOCAL_ZONE_FORWARD_NET
+            value: ${LOCAL_ZONE_FORWARD_NET}
+          command:
           - /usr/local/sbin/init-named.sh
           image: " "
           name: init-named
@@ -114,5 +129,4 @@ objects:
         from:
           kind: ImageStreamTag
           name: ${APP_NAME}:latest
-#          namespace: ${BASE_IMAGE_STREAM_NAMESPACE}
       type: ImageChange
