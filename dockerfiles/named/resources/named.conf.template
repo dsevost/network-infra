@@ -1,0 +1,66 @@
+//
+// named.conf
+//
+// Provided by Red Hat bind package to configure the ISC BIND named(8) DNS
+// server as a caching only nameserver (as a localhost DNS resolver only).
+//
+// See /usr/share/doc/bind*/sample/ for example named configuration files.
+//
+
+include "/etc/named/acl.conf";
+
+options {
+	listen-on port 53 { any; };
+	listen-on-v6 port 53 { any; };
+	directory 	"/var/named";
+	dump-file 	"data/cache_dump.db";
+        statistics-file "data/named_stats.txt";
+        memstatistics-file "data/named_mem_stats.txt";
+	allow-query     { localhost; localnet; };
+	allow-recursion { localhost; localnet; };
+	recursion __ALLOW_RECURSION__;
+
+	dnssec-enable yes;
+	dnssec-validation no;
+	dnssec-lookaside auto;
+
+	/* Path to ISC DLV key */
+	bindkeys-file "/etc/named.iscdlv.key";
+
+	managed-keys-directory "dynamic";
+	
+	include "/etc/named/forwarders.conf";
+};
+
+logging {
+        channel default_debug {
+                file "data/named.run";
+                severity dynamic;
+        };
+/*
+        channel debug_verbose {
+                file "data/named.run";
+                print-time yes;
+                print-severity yes;
+                print-category yes;
+                severity dynamic;
+        };
+*/
+};
+
+zone "." IN {
+	type hint;
+	file "/etc/named_ro/named.ca";
+};
+
+include "/etc/named.rfc1912.zones";
+include "/etc/named.root.key";
+
+# Use with the following in named.conf, adjusting the allow list as needed:
+include "/etc/named_ro/rndc.key";
+
+controls {
+	inet 127.0.0.1 port 953
+	allow { 127.0.0.1; } keys { "rndc-key"; };
+};
+# End of named.conf

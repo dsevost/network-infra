@@ -19,15 +19,12 @@ objects:
       build: ${INTERMEDIATE_IMAGE}
     name: ${BASE_DOCKER_IMAGE}
   spec:
-    lookupPolicy:
-      local: false
     tags:
     - annotations:
         openshift.io/imported-from: ${BASE_DOCKER_IMAGE}:${BASE_DOCKER_IMAGE_VERSION}
       from:
         kind: DockerImage
         name: ${BASE_DOCKER_IMAGE}:${BASE_DOCKER_IMAGE_VERSION}
-#      importPolicy: {}
       name: ${BASE_DOCKER_IMAGE_VERSION}
 - apiVersion: v1
   kind: ImageStream
@@ -36,13 +33,10 @@ objects:
       build: ${INTERMEDIATE_IMAGE}
     name: ${INTERMEDIATE_IMAGE}
   spec:
-#    lookupPolicy:
-#      local: false
     tags:
     - from:
         kind: DockerImage
         name: ${INTERMEDIATE_IMAGE}:${INTERMEDIATE_IMAGE_VERSION}
-#      importPolicy: {}
       name: ${INTERMEDIATE_IMAGE_VERSION}
 - apiVersion: v1
   kind: BuildConfig
@@ -57,7 +51,7 @@ objects:
         name: ${INTERMEDIATE_IMAGE}:${INTERMEDIATE_IMAGE_VERSION}
     source:
       dockerfile: |
-        FROM ${BASE_DOCKER_IMAGE}:${BASE_DOCKER_IMAGE_VERSION}
+        FROM fake-repo
         MAINTAINER dmitry sevostyanov <dmitry.sevostyanov@gmail.com>
         RUN \
             $YUM \
@@ -82,9 +76,9 @@ objects:
         - name: PKG21
           value: dhcp glusterfs-server nfs-utils openldap-clients openldap-servers
             samba
-#        from:
-#          kind: ImageStreamTag
-#          name: ${BASE_DOCKER_IMAGE}:${BASE_DOCKER_IMAGE_VERSION}
+        from:
+          kind: ImageStreamTag
+          name: ${BASE_DOCKER_IMAGE}:${BASE_DOCKER_IMAGE_VERSION}
       type: Docker
     triggers:
     - imageChange: {}
