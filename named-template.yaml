@@ -85,6 +85,17 @@ objects:
         containers:
         - image: " "
           name: ${APP_NAME}
+          livenessProbe:
+            initialDelaySeconds: 10
+            tcpSocket:
+              port: 8053
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - /usr/local/bin/readyness.sh
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
           ports:
           - containerPort: 8053
             protocol: TCP
@@ -97,8 +108,7 @@ objects:
             name: named-data
         dnsPolicy: ClusterFirst
         initContainers:
-        - 
-          env:
+        - env:
           - name: ACL_LOCAL_NETS
             value: ${ACL_LOCAL_NETS}
           - name: MASTER_LOCAL_ZONE_NAME
