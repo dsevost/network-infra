@@ -18,9 +18,10 @@ RUN \
     [ -d "$NAMED_ETC" ] && rm -rf ${NAMED_ETC}{,_ro} ; \
     mkdir -p ${NAMED_ETC}{,_ro} ; \
     cp /var/named/named.ca ${NAMED_ETC}_ro ; \
+    cp /etc/named.rfc1912.zones ${NAMED_ETC}_ro ; \
     /usr/sbin/rndc-confgen -a -u named -r /dev/urandom -c ${NAMED_ETC}_ro/rndc.key ; \
     chown -R $BIND_USER ${NAMED_ETC}{,_ro} ; \
-    chmod 644 /etc/named.rfc1912.zones ; \
+    chmod 644 ${NAMED_ETC}_ro/* ; \
     chmod 755 /usr/local/sbin/init-named.sh
 
 COPY resources/*.template ${NAMED_ETC}_ro/

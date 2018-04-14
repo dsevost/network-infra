@@ -53,7 +53,7 @@ zone "." IN {
 	file "/etc/named_ro/named.ca";
 };
 
-include "/etc/named.rfc1912.zones";
+include "/etc/named/named.rfc1912.zones";
 include "/etc/named.root.key";
 
 # Use with the following in named.conf, adjusting the allow list as needed:
