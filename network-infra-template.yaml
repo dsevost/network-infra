@@ -53,6 +53,7 @@ objects:
       dockerfile: |
         FROM fake-repo
         MAINTAINER dmitry sevostyanov <dmitry.sevostyanov@gmail.com>
+        ARG YUM=dnf
         RUN \
             $YUM \
                 install -y \
