@@ -18,6 +18,14 @@ parameters:
 - name: MASTER_SERVERS
   description: IP address of Master Named Service (Service name of master service, ip address)
   value: ""
+- name: CPU_REQUEST
+  value: 100m
+- name: CPU_LIMIT
+  value: 300m
+- name: MEMORY_REQUEST
+  value: 64Mi
+- name: MEMORY_LIMIT
+  value: 128Mi
 #- name: BASE_IMAGE_NAMESPACE
 #  value: network-infra
 objects:
@@ -114,6 +122,13 @@ objects:
             name: named-etc
           - mountPath: /var/named
             name: named-data
+          resources:
+            limits:
+              cpu: ${CPU_LIMIT}
+              memory: ${MEMORY_LIMIT}
+            requests:
+              cpu: ${CPU_REQUEST}
+              memory: ${MEMORY_REQUEST}
         dnsPolicy: ClusterFirst
         initContainers:
         - env:
