@@ -16,7 +16,7 @@ parameters:
 - name: LOCAL_ZONE_FORWARD_NET
   value: "172.17.7"
 - name: LOCAL_ZONE_AUTODETECT
-  value: yes
+  value: "yes"
 - name: MASTER_SERVERS
   description: IP address of Master Named Service (Service name of master service, ip address)
   value: ""
@@ -28,8 +28,6 @@ parameters:
   value: 64Mi
 - name: MEMORY_LIMIT
   value: 128Mi
-#- name: BASE_IMAGE_NAMESPACE
-#  value: network-infra
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -66,7 +64,6 @@ objects:
         from:
           kind: ImageStreamTag
           name: ${BASE_IMAGESTREAM_NAME}:${BASE_IMAGE_STREAM_TAG}
-#          namespace: ${BASE_IMAGE_STREAM_NAMESPACE}
       type: Docker
     triggers:
     - type: ConfigChange
@@ -96,12 +93,7 @@ objects:
           deploymentconfig: ${APP_NAME}
       spec:
         containers:
-        - env:
-          - name: MASTER_LOCAL_ZONE_NAME
-            value: ${MASTER_LOCAL_ZONE_NAME}
-          - name: MASTER_SERVERS
-            value: ${MASTER_SERVERS}
-          image: " "
+        - image: " "
           name: ${APP_NAME}
           livenessProbe:
             initialDelaySeconds: 10
@@ -172,7 +164,7 @@ objects:
   metadata:
     labels:
       app: ${APP_NAME}
-    name: ${APP_NAME}-ingress
+    name: ${APP_NAME}-ingress-udp
   spec:
     externalTrafficPolicy: Cluster
     ports:
@@ -181,6 +173,19 @@ objects:
       protocol: UDP
       targetPort: 8053
       nodePort: 18053
+    selector:
+      deploymentconfig: ${APP_NAME}
+    sessionAffinity: None
+    type: LoadBalancer
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}-ingress-tcp
+  spec:
+    externalTrafficPolicy: Cluster
+    ports:
     - port: 53
       name: ${APP_NAME}-ingress-tcp
       protocol: TCP
