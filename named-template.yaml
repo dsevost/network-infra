@@ -175,7 +175,7 @@ objects:
     - port: 53
       protocol: UDP
       targetPort: 8053
-      nodePort: ''
+#      nodePort: ''
     selector:
       deploymentconfig: ${APP_NAME}
     sessionAffinity: None
