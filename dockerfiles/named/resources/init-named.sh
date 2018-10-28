@@ -79,4 +79,10 @@ master_in_addr_arpa=`echo $LOCAL_ZONE_FORWARD_NET | sed 's/\([0-9]\+\)\.\([0-9]\
 
 [ -r "${NAMED_DATA}/reverse/$master_in_addr_arpa.db" } || \
     cat ${named_etc_ro}/reverse.db.${tmpl_suffix} | \
-	sed "s|__MASTER_LOCAL_ZONE_NAME__|$MASTER_LOCAL_ZONE_NAME|" > ${NAMED_DATA}/reverse/$master_in_addr_arpa.db
+	sed "\
+	    s|__MASTER_LOCAL_ZONE_NAME__|$MASTER_LOCAL_ZONE_NAME| ;\
+	    s|__NS1__|$NS1| ; \
+	    s|__NS2__|$NS2| ; \
+	    s|__NS_CACHE1__|$NS_CACHE1| ; \
+	    s|__NS_CACHE2__|$NS_CACHE2| ; \
+	" > ${NAMED_DATA}/reverse/$master_in_addr_arpa.db
