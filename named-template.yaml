@@ -93,7 +93,10 @@ objects:
           deploymentconfig: ${APP_NAME}
       spec:
         containers:
-        - image: " "
+        - env:
+          - name: MASTER_LOCAL_ZONE_NAME
+            value: ${MASTER_LOCAL_ZONE_NAME}
+          image: " "
           name: ${APP_NAME}
           livenessProbe:
             initialDelaySeconds: 10
