@@ -34,7 +34,16 @@ cat ${named_etc_ro}/named.conf.${tmpl_suffix} | sed "s|__ALLOW_RECURSION__|$recu
 
 mkdir -p ${NAMED_DATA}/{data,dynamic,forward,reverse}
 
+case $LOCAL_ZONE_AUTODETECT in
+    true|True|TRUE|yes|Yes|YES)
+	autodetect_root_ns=$(dig +short $(echo $MASTER_LOCAL_ZONE_NAME | sed 's/[^\.]\+\.//') ns | head -1)
+	autodetect_ns_name=$(dig @$autodetect_root_ns $MASTER_LOCAL_ZONE_NAME ns | awk "/^$MASTER_LOCAL_ZONE_NAME/ { print \$5; }")
+	autodetect_ns_ip=$(dig +short @$autodetect_root_ns $autodetect_ns_name a)
+	;;
+esac
+
 master_in_addr_arpa=`echo $LOCAL_ZONE_FORWARD_NET | sed 's/\([0-9]\+\)\.\([0-9]\+\)\.\([0-9]\+\)/\3.\2.\1/'`
+
 cat ${named_etc_ro}/local-zones.conf.${tmpl_suffix} | sed "\
     s|__MASTER_LOCAL_ZONE_NAME__|$MASTER_LOCAL_ZONE_NAME| ; \
     s|__MASTER_IN_ADDR_ARPA__|$master_in_addr_arpa| ; \
