@@ -175,7 +175,7 @@ objects:
       name: ${APP_NAME}-ingress-udp
       protocol: UDP
       targetPort: 8053
-      nodePort: 18053
+#      nodePort: 32053
     selector:
       deploymentconfig: ${APP_NAME}
     sessionAffinity: None
@@ -193,7 +193,7 @@ objects:
       name: ${APP_NAME}-ingress-tcp
       protocol: TCP
       targetPort: 8053
-      nodePort: 18053
+#      nodePort: 32153
     selector:
       deploymentconfig: ${APP_NAME}
     sessionAffinity: None
