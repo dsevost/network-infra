@@ -45,9 +45,9 @@ case $LOCAL_ZONE_AUTODETECT in
 	autodetect_ns_ip=$(dig +short @$autodetect_root_ns $autodetect_ns_name a)
 	LOCAL_ZONE_FORWARD_NET=`echo $autodetect_ns_ip | sed 's/\([0-9]\+\)\.\([0-9]\+\)\.\([0-9]\+\).*/\1.\2.\3/'`
 	NS1=`echo $autodetect_ns_ip | sed 's/\([0-9]\+\)\.\([0-9]\+\)\.\([0-9]\+\)\.\([0-9]\+\)/\4/'`
-	NS2=NS1
-	NS_CACHE1=NS1
-	NS_CACHE2=NS1
+	NS2=$NS1
+	NS_CACHE1=$NS1
+	NS_CACHE2=$NS1
 	;;
     *)
 	NS1=251
