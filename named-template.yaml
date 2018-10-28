@@ -15,6 +15,8 @@ parameters:
   value: ds.test
 - name: LOCAL_ZONE_FORWARD_NET
   value: "172.17.7"
+- name: LOCAL_ZONE_AUTODETECT
+  value: yes
 - name: MASTER_SERVERS
   description: IP address of Master Named Service (Service name of master service, ip address)
   value: ""
@@ -86,7 +88,7 @@ objects:
       app: ${APP_NAME}
       deploymentconfig: ${APP_NAME}
     strategy:
-      type: Rolling
+      type: Recreate
     template:
       metadata:
         labels:
@@ -138,6 +140,8 @@ objects:
             value: ${MASTER_LOCAL_ZONE_NAME}
           - name: LOCAL_ZONE_FORWARD_NET
             value: ${LOCAL_ZONE_FORWARD_NET}
+          - name: LOCAL_ZONE_AUTODETECT
+            value: ${LOCAL_ZONE_AUTODETECT}
           command:
           - /usr/local/bin/init-named.sh
           image: " "
